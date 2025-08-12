@@ -41,11 +41,13 @@ INSTALLED_APPS = [
 
     # Custom apps
     'accounts.apps.AccountsConfig', 
+    'stocks.apps.StocksConfig',
 
 
     #third party apps
     'rest_framework',
     'rest_framework_simplejwt',
+    "django_apscheduler",
 ]
 
 MIDDLEWARE = [
@@ -156,3 +158,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#Twelve api key 
+TWELVE_DATA_API_KEY = "99302ce26c4f48efb0f78c7f96b76ca0"
