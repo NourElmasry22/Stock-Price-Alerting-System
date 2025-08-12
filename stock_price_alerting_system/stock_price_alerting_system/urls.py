@@ -22,7 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
     path('api/token/',TokenObtainPairView.as_view()),
-    path('api/', include('stocks.urls'))
+    path('api/', include('stocks.urls')),
+    path('api/', include('alerts.urls'))
 
 
 ]

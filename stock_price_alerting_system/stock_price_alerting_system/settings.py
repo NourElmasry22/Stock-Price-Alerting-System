@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # Custom apps
     'accounts.apps.AccountsConfig', 
     'stocks.apps.StocksConfig',
+    'alerts.apps.AlertsConfig',
 
 
     #third party apps
