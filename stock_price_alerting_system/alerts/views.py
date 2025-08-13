@@ -1,63 +1,75 @@
-# views.py
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import get_object_or_404
-from .models import Alert
+from .models import Alert, AlertHistory, NotificationLog
+from .serializers import (
+    AlertSerializer, CreateAlertSerializer, AlertHistorySerializer,
+    NotificationLogSerializer, AlertSummarySerializer
+)
 from .services import AlertService
-from .serializers import AlertSerializer
 
-alert_service = AlertService()
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def list_alerts(request):
-    """Get all alerts"""
-    alerts = Alert.objects.all()
+    alerts = Alert.objects.filter(user=request.user)
     serializer = AlertSerializer(alerts, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def create_alert(request):
-    """Create a new alert"""
-    serializer = AlertSerializer(data=request.data)
+    serializer = CreateAlertSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=201)
-    return Response(serializer.errors, status=400)
+        alert = serializer.save()
+        return Response(AlertSerializer(alert).data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
-def get_alert_statistics(request):
-    """Get alert statistics"""
-    stats = alert_service.get_alert_statistics()
-    return Response(stats)
+@permission_classes([IsAuthenticated])
+def alert_detail(request, alert_id):
+    alert = get_object_or_404(Alert, id=alert_id, user=request.user)
+    serializer = AlertSerializer(alert)
+    return Response(serializer.data)
 
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def check_all_alerts(request):
-    """Run all alerts check manually"""
-    alert_service.check_all_alerts()
-    return Response({"message": "All alerts checked"})
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def trigger_alert(request, alert_id):
-    """Trigger a single alert check manually"""
-    alert = get_object_or_404(Alert, id=alert_id)
-    alert_service.check_single_alert(alert)
-    return Response({"message": f"Alert {alert.id} checked"})
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def update_alert(request, alert_id):
+    alert = get_object_or_404(Alert, id=alert_id, user=request.user)
+    serializer = AlertSerializer(alert, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['DELETE'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def delete_alert(request, alert_id):
-    """Delete an alert"""
-    alert = get_object_or_404(Alert, id=alert_id)
+    alert = get_object_or_404(Alert, id=alert_id, user=request.user)
     alert.delete()
-    return Response({"message": f"Alert {alert.id} deleted"})
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def alert_history_list(request):
+    histories = AlertHistory.objects.filter(alert__user=request.user)
+    serializer = AlertHistorySerializer(histories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def notification_log_list(request):
+    logs = NotificationLog.objects.filter(user=request.user)
+    serializer = NotificationLogSerializer(logs, many=True)
+    return Response(serializer.data)
+
+
+

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     "django_apscheduler",
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'stock_price_alerting_system.wsgi.application'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_HOST_USER = '2d45350960e1fb'

@@ -1,10 +1,8 @@
 from django.db import models
-from django.conf import settings
 from stocks.models import Stock
-
+from django.contrib.auth.models import User
 
 class Alert(models.Model):
-    """Alert model for stock price alerts"""
     
     ALERT_TYPES = [
         ('threshold', 'Threshold Alert'),
@@ -23,8 +21,7 @@ class Alert(models.Model):
         ('expired', 'Expired'),
         ('paused', 'Paused'),
     ]
-    
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='alerts')
+    user = models.ForeignKey(User,related_name='alerts', on_delete=models.CASCADE)
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name='alerts')
     alert_type = models.CharField(max_length=20, choices=ALERT_TYPES)
     condition_type = models.CharField(max_length=10, choices=CONDITION_TYPES)
@@ -65,15 +62,13 @@ class AlertHistory(models.Model):
 
 
 class NotificationLog(models.Model):
-    """Log of all notifications sent"""
-    
     NOTIFICATION_TYPES = [
         ('email', 'Email'),
         ('sms', 'SMS'),
         ('push', 'Push Notification'),
     ]
     
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     alert = models.ForeignKey(Alert, on_delete=models.CASCADE, related_name='notifications')
     notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
     recipient = models.CharField(max_length=200)  
