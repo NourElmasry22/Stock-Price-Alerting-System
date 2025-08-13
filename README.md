@@ -33,6 +33,9 @@ The **Stock Price Alerting System** allows users to monitor selected stock price
 [ Free Stock API (Twelve) ] → [ Django Backend ] → [ Scheduler ] → [ Alert Logic ] → [ Email/Console Notifications ]
                                    ↑
                            [ PostgreSQL DB ]
+```
+
+
 ## 🗂️ Components
 
 ### Django API Server
@@ -141,6 +144,7 @@ python manage.py runserver
 # Terminal 2: Start APScheduler job runner
 python manage.py runapscheduler
 
+```
 ---
 
 ## 📡 API Endpoints
