@@ -1,5 +1,20 @@
 # 📈 Stock Price Alerting System
 
+## 📑 Table of Contents
+1. [Project Overview](#project-overview)
+2. [Key Features](#key-features)
+3. [Tech Stack](#tech-stack)
+4. [System Architecture](#system-architecture)
+5. [Components](#components)
+6. [Data Flow](#data-flow)
+7. [Configuration](#configuration)
+8. [Installation & Setup](#installation--setup)
+9. [API Endpoints](#api-endpoints)
+10. [Testing](#testing)
+11. [Deployment on AWS EC2 (Windows)](#deployment-on-aws-ec2-windows)
+
+---
+
 ## 📌 Project Overview
 The **Stock Price Alerting System** allows users to monitor selected stock prices and get notified when certain conditions are met — without using paid APIs or tools.
 
@@ -172,3 +187,40 @@ Below is a quick reference for all available endpoints. For full details, see [`
 
 > **📖 Full API Documentation:** See [`API_DOCS.md`](API_DOCS.md) for detailed request/response examples, payloads, and use cases.
 ---
+
+## 🧪 Testing
+
+### How to Run Tests Using Pytest
+
+1. **Install pytest**  
+   Make sure pytest is installed in your virtual environment:
+   ```
+   pip install pytest
+   ```
+
+2. **Run All Tests**
+   ```
+   pytest
+   ```
+
+3. **Run Specific Test File**
+   ```
+   pytest tests/integration/test_tasks.py
+   ```
+
+4. **View Detailed Output**
+   ```
+   pytest -v
+   ```
+
+5. **Run Tests and Show Print Statements**
+   ```
+   pytest -s
+   ```
+
+Test files are located in the `tests/` directory.  
+Make sure your virtual environment is activated before running tests.
+
+---
+
+

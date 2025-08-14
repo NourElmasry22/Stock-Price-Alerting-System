@@ -64,12 +64,21 @@ def alert_history_list(request):
     return Response(serializer.data)
 
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def notification_log_list(request):
-    logs = NotificationLog.objects.filter(user=request.user)
-    serializer = NotificationLogSerializer(logs, many=True)
+    """List notification logs for authenticated user"""
+    queryset = NotificationLog.objects.filter(user=request.user).order_by('-sent_at')
+    queryset = NotificationLog.objects.filter(user=request.user).order_by('-sent_at')
+    
+    if not queryset.exists():
+        return Response(
+            {"message": "No notifications found for this user."},
+            status=status.HTTP_200_OK
+        )
+    
+    serializer = NotificationLogSerializer(queryset, many=True)
     return Response(serializer.data)
-
 
 

@@ -78,6 +78,8 @@ class NotificationLogSerializer(serializers.ModelSerializer):
         fields = ('id', 'user_email', 'alert', 'alert_details', 'notification_type', 
                  'recipient', 'subject', 'message', 'sent_successfully', 'error_message', 'sent_at')
         read_only_fields = ('id', 'user_email')
+        order_by = ('-sent_at',)
+        
 
 
 class AlertSummarySerializer(serializers.Serializer):
